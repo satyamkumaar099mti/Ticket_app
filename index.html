@@ -34,7 +34,13 @@
             --radius-lg: 16px;
             --radius-xl: 20px;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-base);
@@ -43,15 +49,23 @@
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
+
         .glass {
             background: var(--bg-card);
             backdrop-filter: blur(16px);
             border: 1px solid var(--border);
         }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-surface); }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+
         header {
             height: 70px;
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(15, 23, 42, 0.9);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
             padding: 0 2rem;
@@ -62,129 +76,684 @@
             top: 0;
             z-index: 50;
         }
-        .brand-container { display: flex; align-items: center; gap: 12px; }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
         .brand-icon {
-            width: 42px; height: 42px;
+            width: 42px;
+            height: 42px;
             background: linear-gradient(135deg, #6366f1, #a855f7);
             border-radius: var(--radius-md);
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
             box-shadow: 0 8px 16px -4px rgba(99, 102, 241, 0.4);
         }
+
         .brand-text h1 {
-            font-size: 1.15rem; font-weight: 800;
+            font-size: 1.15rem;
+            font-weight: 800;
             background: linear-gradient(to right, #ffffff, #cbd5e1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .brand-text span { font-size: 0.72rem; color: var(--text-dim); font-weight: 600; text-transform: uppercase; }
-        .header-actions { display: flex; align-items: center; gap: 16px; }
+
+        .brand-text span {
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-box {
+            position: relative;
+            width: 260px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            background: rgba(19, 29, 53, 0.6);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 8px 14px 8px 38px;
+            color: white;
+            font-size: 0.85rem;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-box input:focus {
+            border-color: var(--border-focus);
+            background: rgba(19, 29, 53, 0.9);
+        }
+
         .role-pill {
             background: rgba(19, 29, 53, 0.9);
             border: 1px solid var(--border);
             border-radius: var(--radius-md);
-            padding: 4px 6px;
-            display: flex; align-items: center; gap: 8px;
-            font-size: 0.8rem; color: var(--text-muted);
+            padding: 4px 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
         }
+
         .role-pill select {
-            background: #1e293b; color: white; border: none;
-            padding: 6px 12px; border-radius: var(--radius-sm);
-            font-weight: 600; font-size: 0.78rem; cursor: pointer; outline: none;
+            background: #1e293b;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.78rem;
+            cursor: pointer;
+            outline: none;
         }
+
         .btn-primary {
             background: linear-gradient(135deg, #6366f1, #4f46e5);
-            color: white; border: none; padding: 9px 18px;
-            border-radius: var(--radius-md); font-weight: 600; font-size: 0.85rem;
-            cursor: pointer; display: flex; align-items: center; gap: 8px;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); transition: all 0.2s;
+            color: white;
+            border: none;
+            padding: 9px 18px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            transition: all 0.2s ease;
         }
-        .btn-primary:hover { transform: translateY(-1px); }
-        .app-body { display: flex; flex: 1; height: calc(100vh - 70px); }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.45);
+        }
+
+        /* App Body */
+        .app-body {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 70px);
+        }
+
         aside {
-            width: 250px; background: rgba(15, 23, 42, 0.5);
-            border-right: 1px solid var(--border); padding: 1.5rem 1rem;
-            display: flex; flex-direction: column; justify-content: space-between;
+            width: 250px;
+            background: rgba(15, 23, 42, 0.5);
+            border-right: 1px solid var(--border);
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
-        .nav-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+
+        .nav-section-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0 12px;
+            margin-bottom: 8px;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
         .nav-item button {
-            width: 100%; background: transparent; border: 1px solid transparent;
-            color: var(--text-muted); padding: 10px 14px; border-radius: var(--radius-md);
-            font-size: 0.85rem; font-weight: 600; display: flex; align-items: center;
-            justify-content: space-between; cursor: pointer; transition: all 0.2s;
+            width: 100%;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            padding: 10px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
         }
-        .nav-item button:hover { background: rgba(255, 255, 255, 0.04); color: white; }
+
+        .nav-item button:hover {
+            background: rgba(255, 255, 255, 0.04);
+            color: white;
+        }
+
         .nav-item button.active {
             background: var(--primary-light);
             border-color: rgba(99, 102, 241, 0.3);
             color: #818cf8;
         }
+
+        .nav-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
         .nav-badge {
-            background: rgba(99, 102, 241, 0.2); color: #a5b4fc;
-            padding: 2px 7px; border-radius: 6px; font-size: 0.72rem;
-            font-family: 'JetBrains Mono', monospace; font-weight: 700;
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            padding: 2px 7px;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
         }
-        main { flex: 1; overflow-y: auto; padding: 2rem; display: flex; flex-direction: column; gap: 1.75rem; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; }
+
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+        }
+
+        /* Metric Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+        }
+
         .stat-card {
-            padding: 1.25rem 1.5rem; border-radius: var(--radius-lg);
-            display: flex; align-items: center; justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
         }
-        .stat-meta p { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-        .stat-meta h3 { font-size: 2rem; font-weight: 800; color: white; margin-top: 4px; }
-        .table-card { border-radius: var(--radius-xl); overflow: hidden; }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        thead tr { background: rgba(15, 23, 42, 0.95); border-bottom: 1px solid var(--border); }
-        th { padding: 14px 20px; font-size: 0.72rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; }
-        tbody tr { border-bottom: 1px solid rgba(255, 255, 255, 0.04); cursor: pointer; }
-        tbody tr:hover { background: rgba(255, 255, 255, 0.03); }
-        td { padding: 16px 20px; font-size: 0.85rem; vertical-align: middle; }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+        }
+
+        .stat-meta p {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .stat-meta h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            margin-top: 4px;
+        }
+
+        .stat-meta span {
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 4px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        /* Filter Toolbar */
+        .toolbar {
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-main);
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .view-toggle {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 3px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .view-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .view-btn.active {
+            background: #1e293b;
+            color: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        /* Table Card */
+        .table-card {
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: 0 16px 32px -8px rgba(0,0,0,0.5);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        thead tr {
+            background: rgba(15, 23, 42, 0.95);
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            padding: 14px 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        td {
+            padding: 16px 20px;
+            font-size: 0.85rem;
+            vertical-align: middle;
+        }
+
         .badge-id {
-            font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 0.78rem;
-            color: #818cf8; background: rgba(99, 102, 241, 0.12); padding: 4px 8px; border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 0.78rem;
+            color: #818cf8;
+            background: rgba(99, 102, 241, 0.12);
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: inline-block;
         }
-        .badge-prio { padding: 3px 8px; border-radius: 9999px; font-size: 0.72rem; font-weight: 700; }
-        .badge-status { padding: 4px 10px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 700; }
+
+        .badge-prio {
+            padding: 3px 8px;
+            border-radius: 9999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .badge-status {
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
         .badge-category {
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
         }
+
+        /* Kanban */
+        .kanban-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+            min-height: 500px;
+        }
+
+        .kanban-column {
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .kanban-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .kanban-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .kanban-counter {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 0.72rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .kanban-cards-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .kanban-card {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .kanban-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 8px 20px -4px rgba(0,0,0,0.5);
+        }
+
+        /* Charts */
+        .charts-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .chart-box {
+            padding: 1.75rem;
+            border-radius: var(--radius-lg);
+            height: 380px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-box h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-wrapper {
+            flex: 1;
+            position: relative;
+            min-height: 250px;
+        }
+
+        /* Modals */
         .modal-overlay {
-            position: fixed; inset: 0; background: rgba(3, 7, 18, 0.8);
-            backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 100;
+            position: fixed;
+            inset: 0;
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 1.5rem;
         }
-        .modal-overlay.active { display: flex; }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
         .modal-window {
-            width: 100%; max-width: 600px; border-radius: var(--radius-xl); padding: 2rem;
-            display: flex; flex-direction: column; gap: 1.25rem;
+            width: 100%;
+            max-width: 650px;
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            box-shadow: 0 24px 48px -12px rgba(0,0,0,0.7);
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
-        .form-group { display: flex; flex-direction: column; gap: 6px; }
-        .form-group label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .modal-header h3 {
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+
+        .btn-close {
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        .btn-close:hover { color: white; }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
         .form-input, .form-textarea, .form-select {
-            background: rgba(15, 23, 42, 0.9); border: 1px solid var(--border);
-            border-radius: var(--radius-sm); padding: 10px 14px; color: white; font-size: 0.88rem; outline: none;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            color: white;
+            font-size: 0.88rem;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            border-color: var(--border-focus);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .comments-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin: 1rem 0;
+            padding-right: 6px;
+        }
+
+        .comment-bubble {
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .comment-bubble.internal {
+            background: rgba(88, 28, 135, 0.15);
+            border-color: rgba(168, 85, 247, 0.3);
+        }
+
+        .comment-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.75rem;
+        }
+
+        .comment-author {
+            font-weight: 700;
+            color: #818cf8;
+        }
+
+        .comment-author.internal {
+            color: #c084fc;
+        }
+
+        .comment-time {
+            color: var(--text-dim);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+        }
+
+        .comment-body {
+            font-size: 0.82rem;
+            color: var(--text-main);
+            line-height: 1.4;
         }
     </style>
 </head>
 <body>
+
+    <!-- Header Navigation Bar -->
     <header>
         <div class="brand-container">
-            <div class="brand-icon"><i class="fa-solid fa-headset"></i></div>
+            <div class="brand-icon">
+                <i class="fa-solid fa-headset"></i>
+            </div>
             <div class="brand-text">
                 <h1>TicketDesk Pro</h1>
-                <span>Live Interactive Platform</span>
+                <span>Enterprise Support Hub</span>
             </div>
         </div>
+
         <div class="header-actions">
+            <!-- Search -->
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="main-search" oninput="onSearchChange(this.value)" placeholder="Search tickets, IDs, assignees...">
+            </div>
+
+            <!-- Role Simulator -->
             <div class="role-pill">
                 <i class="fa-solid fa-user-shield" style="color: #818cf8;"></i>
-                <span>Role:</span>
+                <span>Viewing as:</span>
                 <select id="user-role-select" onchange="changeActiveRole(this.value)">
                     <option value="admin">Administrator (admin)</option>
                     <option value="agent_alice">Support Agent (agent_alice)</option>
+                    <option value="agent_bob">Support Agent (agent_bob)</option>
                     <option value="john_doe">Customer (john_doe)</option>
                 </select>
             </div>
+
+            <!-- Create Ticket -->
             <button class="btn-primary" onclick="openModal('create-ticket-modal')">
                 <i class="fa-solid fa-plus"></i>
                 <span>New Ticket</span>
@@ -193,133 +762,918 @@
     </header>
 
     <div class="app-body">
+        <!-- Sidebar Navigation -->
         <aside>
-            <div>
-                <ul class="nav-list">
-                    <li class="nav-item">
-                        <button class="active" onclick="showTab('tickets')">
-                            <span><i class="fa-solid fa-inbox"></i> Tickets</span>
-                            <span id="badge-ticket-count" class="nav-badge">3</span>
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button onclick="showTab('analytics')">
-                            <span><i class="fa-solid fa-chart-simple"></i> Analytics</span>
-                        </button>
-                    </li>
-                </ul>
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <div>
+                    <div class="nav-section-title">Navigation</div>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <button id="nav-btn-tickets" class="active" onclick="showTab('tickets')">
+                                <span class="nav-item-left">
+                                    <i class="fa-solid fa-inbox" style="width: 16px;"></i>
+                                    <span>Tickets</span>
+                                </span>
+                                <span id="badge-ticket-count" class="nav-badge">3</span>
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button id="nav-btn-analytics" onclick="showTab('analytics')">
+                                <span class="nav-item-left">
+                                    <i class="fa-solid fa-chart-simple" style="width: 16px;"></i>
+                                    <span>Analytics & SLAs</span>
+                                </span>
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button id="nav-btn-users" onclick="showTab('users')">
+                                <span class="nav-item-left">
+                                    <i class="fa-solid fa-users" style="width: 16px;"></i>
+                                    <span>Team & Access</span>
+                                </span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="nav-section-title">Quick Status Filters</div>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <button onclick="setFilterStatus('ALL')">
+                                <span class="nav-item-left">
+                                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #94a3b8;"></span>
+                                    <span>All Tickets</span>
+                                </span>
+                                <span id="count-status-all" class="nav-badge">3</span>
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button onclick="setFilterStatus('OPEN')">
+                                <span class="nav-item-left">
+                                    <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--status-open);"></span>
+                                    <span>Open</span>
+                                </span>
+                                <span id="count-status-open" class="nav-badge">1</span>
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button onclick="setFilterStatus('IN_PROGRESS')">
+                                <span class="nav-item-left">
+                                    <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--status-progress);"></span>
+                                    <span>In Progress</span>
+                                </span>
+                                <span id="count-status-progress" class="nav-badge">1</span>
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button onclick="setFilterStatus('RESOLVED')">
+                                <span class="nav-item-left">
+                                    <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--status-resolved);"></span>
+                                    <span>Resolved</span>
+                                </span>
+                                <span id="count-status-resolved" class="nav-badge">1</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="glass" style="padding: 12px; border-radius: var(--radius-md);">
-                <div id="user-name-display" style="font-size: 0.85rem; font-weight: 700;">Administrator</div>
-                <div id="user-role-display" style="font-size: 0.7rem; color: #818cf8;">ADMIN</div>
+
+            <!-- Profile Info Box -->
+            <div class="glass" style="padding: 12px; border-radius: var(--radius-md); display: flex; align-items: center; gap: 10px;">
+                <div id="user-avatar-circle" style="width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #6366f1, #3b82f6); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;">
+                    AD
+                </div>
+                <div style="flex: 1; overflow: hidden;">
+                    <div id="user-name-display" style="font-size: 0.85rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Administrator</div>
+                    <div id="user-role-display" style="font-size: 0.7rem; color: #818cf8; font-weight: 600;">ADMIN</div>
+                </div>
             </div>
         </aside>
 
+        <!-- Main Content Area -->
         <main>
-            <div id="tab-tickets" style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <!-- TAB 1: TICKETS DASHBOARD -->
+            <div id="tab-tickets" style="display: flex; flex-direction: column; gap: 1.75rem;">
+                <!-- KPI Stat Cards -->
                 <div class="stats-grid">
                     <div class="stat-card glass">
-                        <div class="stat-meta"><p>Total</p><h3 id="stat-total">3</h3></div>
+                        <div class="stat-meta">
+                            <p>Total Tickets</p>
+                            <h3 id="stat-total">3</h3>
+                            <span style="color: #10b981;"><i class="fa-solid fa-database"></i> Live Persistence</span>
+                        </div>
+                        <div class="stat-icon" style="background: rgba(99, 102, 241, 0.15); color: #818cf8;">
+                            <i class="fa-solid fa-ticket"></i>
+                        </div>
                     </div>
+
                     <div class="stat-card glass">
-                        <div class="stat-meta"><p>Open</p><h3 id="stat-open" style="color: var(--status-open);">1</h3></div>
+                        <div class="stat-meta">
+                            <p>Action Required</p>
+                            <h3 id="stat-open" style="color: var(--status-open);">1</h3>
+                            <span style="color: var(--text-dim);">Unassigned or New</span>
+                        </div>
+                        <div class="stat-icon" style="background: rgba(245, 158, 11, 0.15); color: var(--status-open);">
+                            <i class="fa-solid fa-bell"></i>
+                        </div>
                     </div>
+
                     <div class="stat-card glass">
-                        <div class="stat-meta"><p>In Progress</p><h3 id="stat-progress" style="color: var(--status-progress);">1</h3></div>
+                        <div class="stat-meta">
+                            <p>In Progress</p>
+                            <h3 id="stat-progress" style="color: var(--status-progress);">1</h3>
+                            <span style="color: var(--text-dim);">Assigned & Working</span>
+                        </div>
+                        <div class="stat-icon" style="background: rgba(56, 189, 248, 0.15); color: var(--status-progress);">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                        </div>
                     </div>
+
                     <div class="stat-card glass">
-                        <div class="stat-meta"><p>Resolved</p><h3 id="stat-resolved" style="color: var(--status-resolved);">1</h3></div>
+                        <div class="stat-meta">
+                            <p>Resolved</p>
+                            <h3 id="stat-resolved" style="color: var(--status-resolved);">1</h3>
+                            <span style="color: #10b981;"><i class="fa-solid fa-check"></i> 100% SLA Met</span>
+                        </div>
+                        <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--status-resolved);">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
                     </div>
                 </div>
 
+                <!-- Controls Toolbar -->
+                <div class="toolbar glass">
+                    <div class="filter-group">
+                        <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-dim);">Filters:</span>
+                        <select id="filter-category" class="filter-select" onchange="renderTicketViews()">
+                            <option value="ALL">All Categories</option>
+                            <option value="Network">Network</option>
+                            <option value="Hardware">Hardware</option>
+                            <option value="Software">Software</option>
+                            <option value="Account">Account</option>
+                        </select>
+
+                        <select id="filter-priority" class="filter-select" onchange="renderTicketViews()">
+                            <option value="ALL">All Priorities</option>
+                            <option value="CRITICAL">Critical</option>
+                            <option value="HIGH">High</option>
+                            <option value="MEDIUM">Medium</option>
+                            <option value="LOW">Low</option>
+                        </select>
+                    </div>
+
+                    <!-- Layout Toggle -->
+                    <div class="view-toggle">
+                        <button id="view-toggle-table" class="view-btn active" onclick="switchLayout('table')">
+                            <i class="fa-solid fa-table-list"></i>
+                            <span>Table</span>
+                        </button>
+                        <button id="view-toggle-kanban" class="view-btn" onclick="switchLayout('kanban')">
+                            <i class="fa-solid fa-table-columns"></i>
+                            <span>Kanban</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table View -->
+                <div id="layout-table-view" class="table-card glass">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ticket ID</th>
+                                <th>Subject</th>
+                                <th>Category</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Assignee</th>
+                                <th>Updated</th>
+                                <th style="text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ticket-table-body">
+                            <!-- Injected by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Kanban View -->
+                <div id="layout-kanban-view" class="kanban-grid" style="display: none;">
+                    <div class="kanban-column glass">
+                        <div class="kanban-header">
+                            <div class="kanban-title" style="color: var(--status-open);">
+                                <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--status-open);"></span>
+                                <span>Open</span>
+                            </div>
+                            <span id="kanban-count-open" class="kanban-counter">0</span>
+                        </div>
+                        <div id="kanban-cards-open" class="kanban-cards-wrapper"></div>
+                    </div>
+
+                    <div class="kanban-column glass">
+                        <div class="kanban-header">
+                            <div class="kanban-title" style="color: var(--status-progress);">
+                                <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--status-progress);"></span>
+                                <span>In Progress</span>
+                            </div>
+                            <span id="kanban-count-progress" class="kanban-counter">0</span>
+                        </div>
+                        <div id="kanban-cards-progress" class="kanban-cards-wrapper"></div>
+                    </div>
+
+                    <div class="kanban-column glass">
+                        <div class="kanban-header">
+                            <div class="kanban-title" style="color: var(--status-resolved);">
+                                <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--status-resolved);"></span>
+                                <span>Resolved</span>
+                            </div>
+                            <span id="kanban-count-resolved" class="kanban-counter">0</span>
+                        </div>
+                        <div id="kanban-cards-resolved" class="kanban-cards-wrapper"></div>
+                    </div>
+
+                    <div class="kanban-column glass">
+                        <div class="kanban-header">
+                            <div class="kanban-title" style="color: var(--status-closed);">
+                                <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--status-closed);"></span>
+                                <span>Closed</span>
+                            </div>
+                            <span id="kanban-count-closed" class="kanban-counter">0</span>
+                        </div>
+                        <div id="kanban-cards-closed" class="kanban-cards-wrapper"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: ANALYTICS & SLAS -->
+            <div id="tab-analytics" style="display: none; flex-direction: column; gap: 1.5rem;">
+                <div class="charts-row">
+                    <div class="chart-box glass">
+                        <h4><i class="fa-solid fa-chart-pie" style="color: #818cf8;"></i> Tickets by Category</h4>
+                        <div class="chart-wrapper">
+                            <canvas id="chart-cat-canvas"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-box glass">
+                        <h4><i class="fa-solid fa-chart-column" style="color: #38bdf8;"></i> Priority Distribution</h4>
+                        <div class="chart-wrapper">
+                            <canvas id="chart-prio-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass" style="padding: 1.5rem; border-radius: var(--radius-lg);">
+                    <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 1rem;"><i class="fa-solid fa-user-gear" style="color: #10b981;"></i> Support Agent Workload</h4>
+                    <div id="agent-workload-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: TEAM & ACCESS -->
+            <div id="tab-users" style="display: none; flex-direction: column; gap: 1.5rem;">
                 <div class="table-card glass">
                     <table>
                         <thead>
                             <tr>
-                                <th>ID</th><th>Title</th><th>Category</th><th>Priority</th><th>Status</th><th>Assignee</th>
+                                <th>User ID</th>
+                                <th>Full Name</th>
+                                <th>Username</th>
+                                <th>System Role</th>
+                                <th>Account Status</th>
+                                <th style="text-align: right;">Toggle Access</th>
                             </tr>
                         </thead>
-                        <tbody id="ticket-table-body"></tbody>
+                        <tbody id="users-table-body">
+                            <!-- Injected by JS -->
+                        </tbody>
                     </table>
                 </div>
-            </div>
-
-            <div id="tab-analytics" style="display: none; height: 360px;" class="glass">
-                <canvas id="chart-cat-canvas" style="padding: 20px;"></canvas>
             </div>
         </main>
     </div>
 
-    <!-- Create Modal -->
+    <!-- MODAL: CREATE TICKET -->
     <div id="create-ticket-modal" class="modal-overlay">
         <div class="modal-window glass">
-            <h3>Create Ticket</h3>
-            <form onsubmit="handleCreateTicket(event)" style="display: flex; flex-direction: column; gap: 12px;">
-                <input type="text" id="input-title" class="form-input" placeholder="Ticket Title" required>
-                <textarea id="input-desc" class="form-textarea" rows="3" placeholder="Description" required></textarea>
-                <button type="submit" class="btn-primary">Submit</button>
+            <div class="modal-header">
+                <h3>Submit New Support Ticket</h3>
+                <button class="btn-close" onclick="closeModal('create-ticket-modal')">&times;</button>
+            </div>
+            <form onsubmit="handleCreateTicket(event)" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="form-group">
+                    <label>Title / Summary</label>
+                    <input type="text" id="input-title" class="form-input" placeholder="e.g. WiFi connection timeout in room 302" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="input-category" class="form-select">
+                            <option value="Network">Network</option>
+                            <option value="Hardware">Hardware</option>
+                            <option value="Software">Software</option>
+                            <option value="Account">Account</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Priority</label>
+                        <select id="input-priority" class="form-select">
+                            <option value="LOW">Low</option>
+                            <option value="MEDIUM" selected>Medium</option>
+                            <option value="HIGH">High</option>
+                            <option value="CRITICAL">Critical</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Detailed Description</label>
+                    <textarea id="input-desc" class="form-textarea" rows="4" placeholder="Describe the issue, device model, symptoms..." required></textarea>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 0.5rem;">
+                    <button type="button" class="btn-close" style="font-size: 0.85rem;" onclick="closeModal('create-ticket-modal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Create Ticket</button>
+                </div>
             </form>
         </div>
     </div>
 
+    <!-- MODAL: TICKET DETAILS -->
+    <div id="ticket-detail-modal" class="modal-overlay">
+        <div class="modal-window glass" style="max-width: 700px;">
+            <div class="modal-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span id="detail-id-badge" class="badge-id">TCK-101</span>
+                    <h3 id="detail-title-text" style="font-size: 1.1rem; max-width: 450px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Ticket Details</h3>
+                </div>
+                <button class="btn-close" onclick="closeModal('ticket-detail-modal')">&times;</button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 12px; background: rgba(15, 23, 42, 0.7); border-radius: var(--radius-md);">
+                <div>
+                    <span style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Status</span>
+                    <div id="detail-status" style="margin-top: 4px;">-</div>
+                </div>
+                <div>
+                    <span style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Priority</span>
+                    <div id="detail-priority" style="margin-top: 4px;">-</div>
+                </div>
+                <div>
+                    <span style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Category</span>
+                    <div id="detail-category" style="margin-top: 4px; font-weight: 600; font-size: 0.85rem;">-</div>
+                </div>
+                <div>
+                    <span style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Assignee</span>
+                    <div id="detail-assignee" style="margin-top: 4px; font-weight: 600; font-size: 0.85rem;">-</div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div>
+                <label style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Description</label>
+                <p id="detail-desc-text" style="font-size: 0.88rem; line-height: 1.5; color: #cbd5e1; margin-top: 4px; padding: 12px; background: rgba(15, 23, 42, 0.5); border-radius: var(--radius-sm); border: 1px solid var(--border);"></p>
+            </div>
+
+            <!-- Staff Action Panel -->
+            <div id="staff-action-box" style="padding: 12px; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: var(--radius-md); display: flex; gap: 12px;">
+                <div style="flex: 1;">
+                    <label style="font-size: 0.7rem; color: #a5b4fc; font-weight: 700;">Change Status</label>
+                    <select id="action-status-select" class="form-select" style="width: 100%; padding: 6px 10px; margin-top: 4px; font-size: 0.8rem;" onchange="updateTicketStatus()">
+                        <option value="OPEN">OPEN</option>
+                        <option value="IN_PROGRESS">IN_PROGRESS</option>
+                        <option value="RESOLVED">RESOLVED</option>
+                        <option value="CLOSED">CLOSED</option>
+                    </select>
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-size: 0.7rem; color: #a5b4fc; font-weight: 700;">Reassign Technician</label>
+                    <select id="action-assignee-select" class="form-select" style="width: 100%; padding: 6px 10px; margin-top: 4px; font-size: 0.8rem;" onchange="updateTicketAssignee()">
+                        <option value="Unassigned">Unassigned</option>
+                        <option value="agent_alice">agent_alice</option>
+                        <option value="agent_bob">agent_bob</option>
+                        <option value="admin">admin</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Discussion Activity -->
+            <div>
+                <label style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Activity & Comments</label>
+                <div id="comments-container" class="comments-timeline"></div>
+
+                <form onsubmit="handlePostComment(event)" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                    <input type="text" id="comment-input-field" class="form-input" placeholder="Write a response or note..." required>
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <label id="internal-note-label" style="font-size: 0.75rem; color: #c084fc; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                            <input type="checkbox" id="comment-is-internal">
+                            <span>Internal Staff Note (Customer cannot see)</span>
+                        </label>
+                        <button type="submit" class="btn-primary" style="padding: 6px 14px; font-size: 0.78rem;">Post Note</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
     <script>
         const App = {
             activeRole: 'admin',
+            currentTab: 'tickets',
+            currentLayout: 'table',
+            filterStatus: 'ALL',
+            searchQuery: '',
+            selectedTicketId: null,
+
+            users: [
+                { id: "U-1001", username: "admin", name: "System Administrator", role: "ADMIN", active: true },
+                { id: "U-1002", username: "agent_alice", name: "Alice Smith (Tier 2)", role: "AGENT", active: true },
+                { id: "U-1003", username: "agent_bob", name: "Bob Johnson (Tier 1)", role: "AGENT", active: true },
+                { id: "U-1004", username: "john_doe", name: "John Doe", role: "CUSTOMER", active: true }
+            ],
+
             tickets: [
-                { id: "TCK-101", title: "Cannot connect to campus Wi-Fi", category: "Network", priority: "HIGH", status: "IN_PROGRESS", assignee: "agent_alice" },
-                { id: "TCK-102", title: "Lab 3 PC-14 Monitor flickering", category: "Hardware", priority: "MEDIUM", status: "OPEN", assignee: "Unassigned" },
-                { id: "TCK-103", title: "Reset Student Portal Password", category: "Account", priority: "LOW", status: "RESOLVED", assignee: "agent_bob" }
+                {
+                    id: "TCK-101",
+                    title: "Cannot connect to campus Wi-Fi in Library 2nd Floor",
+                    desc: "Laptop gets APIPA IP 169.254.x.x when trying to connect near cubicles. Reconnected 3 times, still fails.",
+                    category: "Network",
+                    priority: "HIGH",
+                    status: "IN_PROGRESS",
+                    creator: "john_doe",
+                    assignee: "agent_alice",
+                    updatedAt: "2026-11-01 11:15"
+                },
+                {
+                    id: "TCK-102",
+                    title: "Lab 3 PC-14 Monitor flickering intermittently",
+                    desc: "Screen periodically cuts to black during code compilation. HDMI cable reseated, issue persists.",
+                    category: "Hardware",
+                    priority: "MEDIUM",
+                    status: "OPEN",
+                    creator: "john_doe",
+                    assignee: "Unassigned",
+                    updatedAt: "2026-11-03 14:00"
+                },
+                {
+                    id: "TCK-103",
+                    title: "Reset Student Portal Password & Unlock Account",
+                    desc: "Student locked out after typing wrong password 5 times. Verification card checked.",
+                    category: "Account",
+                    priority: "LOW",
+                    status: "RESOLVED",
+                    creator: "john_doe",
+                    assignee: "agent_bob",
+                    updatedAt: "2026-11-04 09:20"
+                }
+            ],
+
+            comments: [
+                { id: "C-1", ticketId: "TCK-101", author: "agent_alice", text: "Verified Cisco WLC switch. AP-04 had DHCP pool exhaustion. Rebooted port.", time: "10:45", internal: true },
+                { id: "C-2", ticketId: "TCK-101", author: "john_doe", text: "Thank you! I am able to connect now.", time: "11:15", internal: false }
             ]
         };
 
-        function renderTickets() {
+        let catChart = null;
+        let prioChart = null;
+
+        function showTab(tab) {
+            App.currentTab = tab;
+            ['tickets', 'analytics', 'users'].forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                const btn = document.getElementById(`nav-btn-${t}`);
+                if (t === tab) {
+                    el.style.display = 'flex';
+                    btn.classList.add('active');
+                } else {
+                    el.style.display = 'none';
+                    btn.classList.remove('active');
+                }
+            });
+
+            if (tab === 'analytics') {
+                renderCharts();
+            }
+            if (tab === 'users') {
+                renderUsersTable();
+            }
+            if (tab === 'tickets') {
+                renderTicketViews();
+            }
+        }
+
+        function switchLayout(layout) {
+            App.currentLayout = layout;
+            const tableView = document.getElementById('layout-table-view');
+            const kanbanView = document.getElementById('layout-kanban-view');
+            const btnTable = document.getElementById('view-toggle-table');
+            const btnKanban = document.getElementById('view-toggle-kanban');
+
+            if (layout === 'table') {
+                tableView.style.display = 'block';
+                kanbanView.style.display = 'none';
+                btnTable.classList.add('active');
+                btnKanban.classList.remove('active');
+            } else {
+                tableView.style.display = 'none';
+                kanbanView.style.display = 'grid';
+                btnTable.classList.remove('active');
+                btnKanban.classList.add('active');
+                renderKanban();
+            }
+        }
+
+        function setFilterStatus(status) {
+            App.filterStatus = status;
+            renderTicketViews();
+        }
+
+        function onSearchChange(val) {
+            App.searchQuery = val.toLowerCase().trim();
+            renderTicketViews();
+        }
+
+        function changeActiveRole(roleUsername) {
+            App.activeRole = roleUsername;
+            const u = App.users.find(x => x.username === roleUsername);
+            if (u) {
+                document.getElementById('user-name-display').textContent = u.name;
+                document.getElementById('user-role-display').textContent = u.role;
+                document.getElementById('user-avatar-circle').textContent = u.username.substring(0, 2).toUpperCase();
+            }
+            renderTicketViews();
+        }
+
+        function getFilteredTickets() {
+            let list = [...App.tickets];
+            const activeUser = App.users.find(u => u.username === App.activeRole);
+
+            if (activeUser && activeUser.role === 'CUSTOMER') {
+                list = list.filter(t => t.creator === activeUser.username);
+            } else if (activeUser && activeUser.role === 'AGENT') {
+                list = list.filter(t => t.assignee === activeUser.username || t.assignee === 'Unassigned');
+            }
+
+            if (App.filterStatus !== 'ALL') {
+                list = list.filter(t => t.status === App.filterStatus);
+            }
+
+            const catEl = document.getElementById('filter-category');
+            if (catEl && catEl.value !== 'ALL') list = list.filter(t => t.category === catEl.value);
+
+            const prioEl = document.getElementById('filter-priority');
+            if (prioEl && prioEl.value !== 'ALL') list = list.filter(t => t.priority === prioEl.value);
+
+            if (App.searchQuery) {
+                list = list.filter(t => 
+                    t.id.toLowerCase().includes(App.searchQuery) ||
+                    t.title.toLowerCase().includes(App.searchQuery) ||
+                    t.assignee.toLowerCase().includes(App.searchQuery)
+                );
+            }
+            return list;
+        }
+
+        function prioBadge(prio) {
+            const colors = {
+                CRITICAL: { bg: 'rgba(244, 63, 94, 0.15)', text: '#f43f5e', icon: 'fa-triangle-exclamation' },
+                HIGH: { bg: 'rgba(245, 158, 11, 0.15)', text: '#f59e0b', icon: 'fa-arrow-up' },
+                MEDIUM: { bg: 'rgba(56, 189, 248, 0.15)', text: '#38bdf8', icon: 'fa-minus' },
+                LOW: { bg: 'rgba(100, 116, 139, 0.15)', text: '#94a3b8', icon: 'fa-arrow-down' }
+            };
+            const c = colors[prio] || colors.MEDIUM;
+            return `<span class="badge-prio" style="background: ${c.bg}; color: ${c.text};"><i class="fa-solid ${c.icon}"></i> ${prio}</span>`;
+        }
+
+        function statusBadge(status) {
+            const colors = {
+                OPEN: { bg: 'rgba(245, 158, 11, 0.12)', text: '#fbbf24', dot: '#f59e0b' },
+                IN_PROGRESS: { bg: 'rgba(56, 189, 248, 0.12)', text: '#38bdf8', dot: '#38bdf8' },
+                RESOLVED: { bg: 'rgba(16, 185, 129, 0.12)', text: '#34d399', dot: '#10b981' },
+                CLOSED: { bg: 'rgba(100, 116, 139, 0.12)', text: '#94a3b8', dot: '#64748b' }
+            };
+            const c = colors[status] || colors.OPEN;
+            return `<span class="badge-status" style="background: ${c.bg}; color: ${c.text};"><span style="width: 6px; height: 6px; border-radius: 50%; background: ${c.dot};"></span> ${status}</span>`;
+        }
+
+        function renderTicketViews() {
+            const list = getFilteredTickets();
             const tbody = document.getElementById('ticket-table-body');
             tbody.innerHTML = '';
+
             document.getElementById('stat-total').textContent = App.tickets.length;
             document.getElementById('stat-open').textContent = App.tickets.filter(t => t.status === 'OPEN').length;
             document.getElementById('stat-progress').textContent = App.tickets.filter(t => t.status === 'IN_PROGRESS').length;
-            document.getElementById('stat-resolved').textContent = App.tickets.filter(t => t.status === 'RESOLVED').length;
+            document.getElementById('stat-resolved').textContent = App.tickets.filter(t => t.status === 'RESOLVED' || t.status === 'CLOSED').length;
+            document.getElementById('badge-ticket-count').textContent = App.tickets.length;
 
-            App.tickets.forEach(t => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><span class="badge-id">${t.id}</span></td>
-                    <td style="font-weight: 600;">${t.title}</td>
-                    <td><span class="badge-category">${t.category}</span></td>
-                    <td><span class="badge-prio" style="color:#f59e0b;">${t.priority}</span></td>
-                    <td><span class="badge-status" style="color:#38bdf8;">${t.status}</span></td>
-                    <td>${t.assignee}</td>
+            document.getElementById('count-status-all').textContent = App.tickets.length;
+            document.getElementById('count-status-open').textContent = App.tickets.filter(t => t.status === 'OPEN').length;
+            document.getElementById('count-status-progress').textContent = App.tickets.filter(t => t.status === 'IN_PROGRESS').length;
+            document.getElementById('count-status-resolved').textContent = App.tickets.filter(t => t.status === 'RESOLVED').length;
+
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 40px; color: var(--text-dim);"><i class="fa-regular fa-folder-open" style="font-size: 2rem; margin-bottom: 8px; display: block;"></i>No tickets match the current filters.</td></tr>`;
+            } else {
+                list.forEach(t => {
+                    const tr = document.createElement('tr');
+                    tr.onclick = () => openTicketDetail(t.id);
+                    tr.innerHTML = `
+                        <td><span class="badge-id">${t.id}</span></td>
+                        <td>
+                            <div style="font-weight: 700; color: white;">${t.title}</div>
+                            <div style="font-size: 0.72rem; color: var(--text-dim);">By ${t.creator}</div>
+                        </td>
+                        <td><span class="badge-category">${t.category}</span></td>
+                        <td>${prioBadge(t.priority)}</td>
+                        <td>${statusBadge(t.status)}</td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.82rem;">
+                                <i class="fa-solid fa-user-circle" style="color: #64748b;"></i>
+                                <span>${t.assignee}</span>
+                            </div>
+                        </td>
+                        <td style="font-size: 0.78rem; color: var(--text-dim); font-family: 'JetBrains Mono', monospace;">${t.updatedAt}</td>
+                        <td style="text-align: right;">
+                            <button class="btn-primary" style="padding: 5px 12px; font-size: 0.75rem;" onclick="event.stopPropagation(); openTicketDetail('${t.id}')">
+                                Inspect
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            if (App.currentLayout === 'kanban') renderKanban();
+        }
+
+        function renderKanban() {
+            const list = getFilteredTickets();
+            const cols = {
+                OPEN: document.getElementById('kanban-cards-open'),
+                IN_PROGRESS: document.getElementById('kanban-cards-progress'),
+                RESOLVED: document.getElementById('kanban-cards-resolved'),
+                CLOSED: document.getElementById('kanban-cards-closed')
+            };
+
+            Object.values(cols).forEach(c => c.innerHTML = '');
+
+            document.getElementById('kanban-count-open').textContent = list.filter(t => t.status === 'OPEN').length;
+            document.getElementById('kanban-count-progress').textContent = list.filter(t => t.status === 'IN_PROGRESS').length;
+            document.getElementById('kanban-count-resolved').textContent = list.filter(t => t.status === 'RESOLVED').length;
+            document.getElementById('kanban-count-closed').textContent = list.filter(t => t.status === 'CLOSED').length;
+
+            list.forEach(t => {
+                const card = document.createElement('div');
+                card.className = 'kanban-card';
+                card.onclick = () => openTicketDetail(t.id);
+                card.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <span class="badge-id">${t.id}</span>
+                        ${prioBadge(t.priority)}
+                    </div>
+                    <div style="font-size: 0.85rem; font-weight: 700; color: white; line-height: 1.3;">${t.title}</div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-dim); border-top: 1px solid var(--border); padding-top: 8px;">
+                        <span><i class="fa-solid fa-tag"></i> ${t.category}</span>
+                        <span><i class="fa-solid fa-user"></i> ${t.assignee}</span>
+                    </div>
                 `;
-                tbody.appendChild(tr);
+                if (cols[t.status]) cols[t.status].appendChild(card);
             });
-        }
-
-        function showTab(t) {
-            document.getElementById('tab-tickets').style.display = t === 'tickets' ? 'flex' : 'none';
-            document.getElementById('tab-analytics').style.display = t === 'analytics' ? 'block' : 'none';
-        }
-
-        function changeActiveRole(val) {
-            App.activeRole = val;
-            document.getElementById('user-name-display').textContent = val;
-            renderTickets();
         }
 
         function openModal(id) { document.getElementById(id).classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-        function handleCreateTicket(e) {
-            e.preventDefault();
-            App.tickets.unshift({
-                id: "TCK-" + (App.tickets.length + 101),
-                title: document.getElementById('input-title').value,
-                category: "General", priority: "MEDIUM", status: "OPEN", assignee: "Unassigned"
-            });
-            closeModal('create-ticket-modal');
-            renderTickets();
+        function openTicketDetail(id) {
+            const t = App.tickets.find(x => x.id === id);
+            if (!t) return;
+            App.selectedTicketId = id;
+
+            document.getElementById('detail-id-badge').textContent = t.id;
+            document.getElementById('detail-title-text').textContent = t.title;
+            document.getElementById('detail-desc-text').textContent = t.desc;
+            document.getElementById('detail-status').innerHTML = statusBadge(t.status);
+            document.getElementById('detail-priority').innerHTML = prioBadge(t.priority);
+            document.getElementById('detail-category').textContent = t.category;
+            document.getElementById('detail-assignee').textContent = t.assignee;
+
+            document.getElementById('action-status-select').value = t.status;
+            document.getElementById('action-assignee-select').value = t.assignee;
+
+            const curUser = App.users.find(u => u.username === App.activeRole);
+            const isStaff = curUser && (curUser.role === 'ADMIN' || curUser.role === 'AGENT');
+            document.getElementById('staff-action-box').style.display = isStaff ? 'flex' : 'none';
+            document.getElementById('internal-note-label').style.display = isStaff ? 'flex' : 'none';
+
+            renderComments(t.id);
+            openModal('ticket-detail-modal');
         }
 
-        window.onload = renderTickets;
+        function renderComments(ticketId) {
+            const cont = document.getElementById('comments-container');
+            cont.innerHTML = '';
+            const curUser = App.users.find(u => u.username === App.activeRole);
+            const isStaff = curUser && (curUser.role === 'ADMIN' || curUser.role === 'AGENT');
+
+            const list = App.comments.filter(c => c.ticketId === ticketId && (!c.internal || isStaff));
+
+            if (list.length === 0) {
+                cont.innerHTML = '<div style="font-size: 0.78rem; color: var(--text-dim); padding: 8px;">No comments yet.</div>';
+                return;
+            }
+
+            list.forEach(c => {
+                const el = document.createElement('div');
+                el.className = `comment-bubble ${c.internal ? 'internal' : ''}`;
+                el.innerHTML = `
+                    <div class="comment-header">
+                        <span class="comment-author ${c.internal ? 'internal' : ''}">
+                            ${c.author} ${c.internal ? '<span style="font-size: 0.65rem; padding: 2px 5px; background: rgba(168, 85, 247, 0.2); border-radius: 4px;">INTERNAL</span>' : ''}
+                        </span>
+                        <span class="comment-time">${c.time}</span>
+                    </div>
+                    <div class="comment-body">${c.text}</div>
+                `;
+                cont.appendChild(el);
+            });
+        }
+
+        function handlePostComment(e) {
+            e.preventDefault();
+            const text = document.getElementById('comment-input-field').value.trim();
+            const isInternal = document.getElementById('comment-is-internal').checked;
+            if (!text || !App.selectedTicketId) return;
+
+            App.comments.push({
+                id: 'C-' + (App.comments.length + 1),
+                ticketId: App.selectedTicketId,
+                author: App.activeRole,
+                text: text,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                internal: isInternal
+            });
+
+            document.getElementById('comment-input-field').value = '';
+            document.getElementById('comment-is-internal').checked = false;
+            renderComments(App.selectedTicketId);
+        }
+
+        function updateTicketStatus() {
+            const t = App.tickets.find(x => x.id === App.selectedTicketId);
+            if (t) {
+                t.status = document.getElementById('action-status-select').value;
+                document.getElementById('detail-status').innerHTML = statusBadge(t.status);
+                renderTicketViews();
+            }
+        }
+
+        function updateTicketAssignee() {
+            const t = App.tickets.find(x => x.id === App.selectedTicketId);
+            if (t) {
+                t.assignee = document.getElementById('action-assignee-select').value;
+                document.getElementById('detail-assignee').textContent = t.assignee;
+                renderTicketViews();
+            }
+        }
+
+        function handleCreateTicket(e) {
+            e.preventDefault();
+            const title = document.getElementById('input-title').value.trim();
+            const desc = document.getElementById('input-desc').value.trim();
+            const cat = document.getElementById('input-category').value;
+            const prio = document.getElementById('input-priority').value;
+
+            const newId = "TCK-" + (App.tickets.length + 101);
+            App.tickets.unshift({
+                id: newId,
+                title: title,
+                desc: desc,
+                category: cat,
+                priority: prio,
+                status: 'OPEN',
+                creator: App.activeRole,
+                assignee: 'Unassigned',
+                updatedAt: 'Just now'
+            });
+
+            closeModal('create-ticket-modal');
+            document.getElementById('input-title').value = '';
+            document.getElementById('input-desc').value = '';
+            renderTicketViews();
+        }
+
+        function renderUsersTable() {
+            const tbody = document.getElementById('users-table-body');
+            tbody.innerHTML = '';
+            App.users.forEach(u => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><span class="badge-id">${u.id}</span></td>
+                    <td style="font-weight: 700; color: white;">${u.name}</td>
+                    <td style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #a5b4fc;">${u.username}</td>
+                    <td><span class="badge-category" style="color: #818cf8; font-weight: 700;">${u.role}</span></td>
+                    <td>
+                        <span style="display: flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 700; color: ${u.active ? '#10b981' : '#f43f5e'};">
+                            <span style="width: 6px; height: 6px; border-radius: 50%; background: ${u.active ? '#10b981' : '#f43f5e'};"></span>
+                            ${u.active ? 'ACTIVE' : 'DISABLED'}
+                        </span>
+                    </td>
+                    <td style="text-align: right;">
+                        <button class="btn-primary" style="padding: 4px 10px; font-size: 0.72rem; background: #334155;" onclick="toggleUser('${u.username}')">
+                            Toggle
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function toggleUser(username) {
+            const u = App.users.find(x => x.username === username);
+            if (u && u.username !== 'admin') {
+                u.active = !u.active;
+                renderUsersTable();
+            }
+        }
+
+        function renderCharts() {
+            const catCounts = {};
+            App.tickets.forEach(t => catCounts[t.category] = (catCounts[t.category] || 0) + 1);
+
+            const prioCounts = { LOW: 0, MEDIUM: 0, HIGH: 0, CRITICAL: 0 };
+            App.tickets.forEach(t => prioCounts[t.priority] = (prioCounts[t.priority] || 0) + 1);
+
+            if (catChart) catChart.destroy();
+            const catCanvas = document.getElementById('chart-cat-canvas');
+            if (catCanvas) {
+                catChart = new Chart(catCanvas, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(catCounts),
+                        datasets: [{
+                            data: Object.values(catCounts),
+                            backgroundColor: ['#6366f1', '#38bdf8', '#10b981', '#f59e0b', '#ec4899'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } }
+                    }
+                });
+            }
+
+            if (prioChart) prioChart.destroy();
+            const prioCanvas = document.getElementById('chart-prio-canvas');
+            if (prioCanvas) {
+                prioChart = new Chart(prioCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Low', 'Medium', 'High', 'Critical'],
+                        datasets: [{
+                            label: 'Tickets',
+                            data: [prioCounts.LOW, prioCounts.MEDIUM, prioCounts.HIGH, prioCounts.CRITICAL],
+                            backgroundColor: ['#64748b', '#38bdf8', '#f59e0b', '#f43f5e'],
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { ticks: { color: '#64748b', stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                            x: { ticks: { color: '#94a3b8' }, grid: { display: false } }
+                        }
+                    }
+                });
+            }
+
+            const wl = document.getElementById('agent-workload-list');
+            if (wl) {
+                wl.innerHTML = '';
+                const agents = App.users.filter(u => u.role === 'AGENT' || u.role === 'ADMIN');
+                agents.forEach(a => {
+                    const count = App.tickets.filter(t => t.assignee === a.username).length;
+                    const card = document.createElement('div');
+                    card.style = 'padding: 12px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;';
+                    card.innerHTML = `
+                        <div>
+                            <div style="font-weight: 700; font-size: 0.85rem; color: white;">${a.name}</div>
+                            <div style="font-size: 0.72rem; color: var(--text-dim);">${a.username}</div>
+                        </div>
+                        <div style="font-size: 1.25rem; font-weight: 800; color: #818cf8;">${count}</div>
+                    `;
+                    wl.appendChild(card);
+                });
+            }
+        }
+
+        window.onload = () => {
+            renderTicketViews();
+        };
     </script>
 </body>
 </html>
