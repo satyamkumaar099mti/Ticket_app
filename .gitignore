@@ -1,0 +1,17 @@
+# Build artifacts and executables
+*.exe
+*.o
+*.obj
+build/
+
+# Runtime data files (CSV database)
+data_users.csv
+data_tickets.csv
+data_comments.csv
+
+# IDE & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
