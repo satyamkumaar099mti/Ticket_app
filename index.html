@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TicketDesk Pro | Service Operations Platform</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --bg-base: #090d16;
+            --bg-surface: #0f172a;
+            --bg-card: rgba(19, 29, 53, 0.75);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-focus: #6366f1;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --primary-light: rgba(99, 102, 241, 0.15);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            --status-open: #f59e0b;
+            --status-progress: #38bdf8;
+            --status-resolved: #10b981;
+            --status-closed: #64748b;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        .glass {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+        }
+        header {
+            height: 70px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .brand-container { display: flex; align-items: center; gap: 12px; }
+        .brand-icon {
+            width: 42px; height: 42px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            border-radius: var(--radius-md);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 1.25rem;
+            box-shadow: 0 8px 16px -4px rgba(99, 102, 241, 0.4);
+        }
+        .brand-text h1 {
+            font-size: 1.15rem; font-weight: 800;
+            background: linear-gradient(to right, #ffffff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .brand-text span { font-size: 0.72rem; color: var(--text-dim); font-weight: 600; text-transform: uppercase; }
+        .header-actions { display: flex; align-items: center; gap: 16px; }
+        .role-pill {
+            background: rgba(19, 29, 53, 0.9);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 4px 6px;
+            display: flex; align-items: center; gap: 8px;
+            font-size: 0.8rem; color: var(--text-muted);
+        }
+        .role-pill select {
+            background: #1e293b; color: white; border: none;
+            padding: 6px 12px; border-radius: var(--radius-sm);
+            font-weight: 600; font-size: 0.78rem; cursor: pointer; outline: none;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white; border: none; padding: 9px 18px;
+            border-radius: var(--radius-md); font-weight: 600; font-size: 0.85rem;
+            cursor: pointer; display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); transition: all 0.2s;
+        }
+        .btn-primary:hover { transform: translateY(-1px); }
+        .app-body { display: flex; flex: 1; height: calc(100vh - 70px); }
+        aside {
+            width: 250px; background: rgba(15, 23, 42, 0.5);
+            border-right: 1px solid var(--border); padding: 1.5rem 1rem;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .nav-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+        .nav-item button {
+            width: 100%; background: transparent; border: 1px solid transparent;
+            color: var(--text-muted); padding: 10px 14px; border-radius: var(--radius-md);
+            font-size: 0.85rem; font-weight: 600; display: flex; align-items: center;
+            justify-content: space-between; cursor: pointer; transition: all 0.2s;
+        }
+        .nav-item button:hover { background: rgba(255, 255, 255, 0.04); color: white; }
+        .nav-item button.active {
+            background: var(--primary-light);
+            border-color: rgba(99, 102, 241, 0.3);
+            color: #818cf8;
+        }
+        .nav-badge {
+            background: rgba(99, 102, 241, 0.2); color: #a5b4fc;
+            padding: 2px 7px; border-radius: 6px; font-size: 0.72rem;
+            font-family: 'JetBrains Mono', monospace; font-weight: 700;
+        }
+        main { flex: 1; overflow-y: auto; padding: 2rem; display: flex; flex-direction: column; gap: 1.75rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; }
+        .stat-card {
+            padding: 1.25rem 1.5rem; border-radius: var(--radius-lg);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .stat-meta p { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .stat-meta h3 { font-size: 2rem; font-weight: 800; color: white; margin-top: 4px; }
+        .table-card { border-radius: var(--radius-xl); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        thead tr { background: rgba(15, 23, 42, 0.95); border-bottom: 1px solid var(--border); }
+        th { padding: 14px 20px; font-size: 0.72rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; }
+        tbody tr { border-bottom: 1px solid rgba(255, 255, 255, 0.04); cursor: pointer; }
+        tbody tr:hover { background: rgba(255, 255, 255, 0.03); }
+        td { padding: 16px 20px; font-size: 0.85rem; vertical-align: middle; }
+        .badge-id {
+            font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 0.78rem;
+            color: #818cf8; background: rgba(99, 102, 241, 0.12); padding: 4px 8px; border-radius: 6px;
+        }
+        .badge-prio { padding: 3px 8px; border-radius: 9999px; font-size: 0.72rem; font-weight: 700; }
+        .badge-status { padding: 4px 10px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 700; }
+        .badge-category {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; color: var(--text-muted);
+        }
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 100;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-window {
+            width: 100%; max-width: 600px; border-radius: var(--radius-xl); padding: 2rem;
+            display: flex; flex-direction: column; gap: 1.25rem;
+        }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .form-input, .form-textarea, .form-select {
+            background: rgba(15, 23, 42, 0.9); border: 1px solid var(--border);
+            border-radius: var(--radius-sm); padding: 10px 14px; color: white; font-size: 0.88rem; outline: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="brand-container">
+            <div class="brand-icon"><i class="fa-solid fa-headset"></i></div>
+            <div class="brand-text">
+                <h1>TicketDesk Pro</h1>
+                <span>Live Interactive Platform</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <div class="role-pill">
+                <i class="fa-solid fa-user-shield" style="color: #818cf8;"></i>
+                <span>Role:</span>
+                <select id="user-role-select" onchange="changeActiveRole(this.value)">
+                    <option value="admin">Administrator (admin)</option>
+                    <option value="agent_alice">Support Agent (agent_alice)</option>
+                    <option value="john_doe">Customer (john_doe)</option>
+                </select>
+            </div>
+            <button class="btn-primary" onclick="openModal('create-ticket-modal')">
+                <i class="fa-solid fa-plus"></i>
+                <span>New Ticket</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="app-body">
+        <aside>
+            <div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <button class="active" onclick="showTab('tickets')">
+                            <span><i class="fa-solid fa-inbox"></i> Tickets</span>
+                            <span id="badge-ticket-count" class="nav-badge">3</span>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button onclick="showTab('analytics')">
+                            <span><i class="fa-solid fa-chart-simple"></i> Analytics</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div class="glass" style="padding: 12px; border-radius: var(--radius-md);">
+                <div id="user-name-display" style="font-size: 0.85rem; font-weight: 700;">Administrator</div>
+                <div id="user-role-display" style="font-size: 0.7rem; color: #818cf8;">ADMIN</div>
+            </div>
+        </aside>
+
+        <main>
+            <div id="tab-tickets" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <div class="stats-grid">
+                    <div class="stat-card glass">
+                        <div class="stat-meta"><p>Total</p><h3 id="stat-total">3</h3></div>
+                    </div>
+                    <div class="stat-card glass">
+                        <div class="stat-meta"><p>Open</p><h3 id="stat-open" style="color: var(--status-open);">1</h3></div>
+                    </div>
+                    <div class="stat-card glass">
+                        <div class="stat-meta"><p>In Progress</p><h3 id="stat-progress" style="color: var(--status-progress);">1</h3></div>
+                    </div>
+                    <div class="stat-card glass">
+                        <div class="stat-meta"><p>Resolved</p><h3 id="stat-resolved" style="color: var(--status-resolved);">1</h3></div>
+                    </div>
+                </div>
+
+                <div class="table-card glass">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th><th>Title</th><th>Category</th><th>Priority</th><th>Status</th><th>Assignee</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ticket-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tab-analytics" style="display: none; height: 360px;" class="glass">
+                <canvas id="chart-cat-canvas" style="padding: 20px;"></canvas>
+            </div>
+        </main>
+    </div>
+
+    <!-- Create Modal -->
+    <div id="create-ticket-modal" class="modal-overlay">
+        <div class="modal-window glass">
+            <h3>Create Ticket</h3>
+            <form onsubmit="handleCreateTicket(event)" style="display: flex; flex-direction: column; gap: 12px;">
+                <input type="text" id="input-title" class="form-input" placeholder="Ticket Title" required>
+                <textarea id="input-desc" class="form-textarea" rows="3" placeholder="Description" required></textarea>
+                <button type="submit" class="btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const App = {
+            activeRole: 'admin',
+            tickets: [
+                { id: "TCK-101", title: "Cannot connect to campus Wi-Fi", category: "Network", priority: "HIGH", status: "IN_PROGRESS", assignee: "agent_alice" },
+                { id: "TCK-102", title: "Lab 3 PC-14 Monitor flickering", category: "Hardware", priority: "MEDIUM", status: "OPEN", assignee: "Unassigned" },
+                { id: "TCK-103", title: "Reset Student Portal Password", category: "Account", priority: "LOW", status: "RESOLVED", assignee: "agent_bob" }
+            ]
+        };
+
+        function renderTickets() {
+            const tbody = document.getElementById('ticket-table-body');
+            tbody.innerHTML = '';
+            document.getElementById('stat-total').textContent = App.tickets.length;
+            document.getElementById('stat-open').textContent = App.tickets.filter(t => t.status === 'OPEN').length;
+            document.getElementById('stat-progress').textContent = App.tickets.filter(t => t.status === 'IN_PROGRESS').length;
+            document.getElementById('stat-resolved').textContent = App.tickets.filter(t => t.status === 'RESOLVED').length;
+
+            App.tickets.forEach(t => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><span class="badge-id">${t.id}</span></td>
+                    <td style="font-weight: 600;">${t.title}</td>
+                    <td><span class="badge-category">${t.category}</span></td>
+                    <td><span class="badge-prio" style="color:#f59e0b;">${t.priority}</span></td>
+                    <td><span class="badge-status" style="color:#38bdf8;">${t.status}</span></td>
+                    <td>${t.assignee}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function showTab(t) {
+            document.getElementById('tab-tickets').style.display = t === 'tickets' ? 'flex' : 'none';
+            document.getElementById('tab-analytics').style.display = t === 'analytics' ? 'block' : 'none';
+        }
+
+        function changeActiveRole(val) {
+            App.activeRole = val;
+            document.getElementById('user-name-display').textContent = val;
+            renderTickets();
+        }
+
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        function handleCreateTicket(e) {
+            e.preventDefault();
+            App.tickets.unshift({
+                id: "TCK-" + (App.tickets.length + 101),
+                title: document.getElementById('input-title').value,
+                category: "General", priority: "MEDIUM", status: "OPEN", assignee: "Unassigned"
+            });
+            closeModal('create-ticket-modal');
+            renderTickets();
+        }
+
+        window.onload = renderTickets;
+    </script>
+</body>
+</html>
